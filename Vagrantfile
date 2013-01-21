@@ -2,6 +2,35 @@
 # vi: set ft=ruby :
 
 Vagrant::Config.run do |config|
+  config.vm.define :nginx do |nginx_config|
+    nginx_config.vm.box = "precise64"
+    nginx_config.vm.network :hostonly, "192.168.33.10"
+
+    nginx_config.vm.provision :puppet do |puppet|
+      puppet.manifests_path = "manifests"
+      puppet.manifest_file  = "nginx.pp"
+    end
+  end
+
+  config.vm.define :mongo do |mongo_config|
+    mongo_config.vm.box = "precise64"
+    mongo_config.vm.network :hostonly, "192.168.33.20"
+
+    mongo_config.vm.provision :puppet do |puppet|
+      puppet.manifests_path = "manifests"
+      puppet.manifest_file  = "mongo.pp"
+    end
+  end
+
+  config.vm.define :fpm do |fpm_config|
+    fpm_config.vm.box = "precise64"
+    fpm_config.vm.network :hostonly, "192.168.33.30"
+
+    fpm_config.vm.provision :puppet do |puppet|
+      puppet.manifests_path = "manifests"
+      puppet.manifest_file  = "fpm.pp"
+    end
+  end
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
@@ -38,7 +67,7 @@ Vagrant::Config.run do |config|
   # an identifier, the second is the path on the guest to mount the
   # folder, and the third is the path on the host to the actual folder.
   # config.vm.share_folder "v-data", "/vagrant_data", "../data"
-  config.vm.share_folder("symfony", "/usr/share/nginx/www/symfony", "../mdb.sf21.lo", :nfs => true)
+  # config.vm.share_folder("symfony", "/usr/share/nginx/www/symfony", "../mdb.sf21.lo", :nfs => true)
 
   # Enable provisioning with Puppet stand alone.  Puppet manifests
   # are contained in a directory path relative to this Vagrantfile.
