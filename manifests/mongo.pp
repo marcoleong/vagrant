@@ -14,7 +14,7 @@ class mongo {
 
     # sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
     exec { 'apt-key mongokey':
-        command => 'sudo /usr/bin/apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10',
+        command => '/usr/bin/apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10',
         before => File["/etc/apt/sources.list.d/10gen.list"]
     }
 
@@ -38,3 +38,4 @@ class mongo {
     }
 }
     
+include mongo

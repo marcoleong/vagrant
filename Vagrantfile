@@ -4,7 +4,8 @@
 Vagrant::Config.run do |config|
   config.vm.define :nginx do |nginx_config|
     nginx_config.vm.box = "precise64"
-    nginx_config.vm.network :hostonly, "192.168.33.10"
+    nginx_config.vm.network :hostonly, "192.168.34.10"
+    nginx_config.vm.share_folder("symfony", "/usr/share/nginx/www/symfony", "../mdb.sf21.lo", :nfs => true)
 
     nginx_config.vm.provision :puppet do |puppet|
       puppet.manifests_path = "manifests"
@@ -12,9 +13,20 @@ Vagrant::Config.run do |config|
     end
   end
 
+  config.vm.define :fpm do |fpm_config|
+    fpm_config.vm.box = "precise64"
+    fpm_config.vm.network :hostonly, "192.168.34.30"
+    fpm_config.vm.share_folder("symfony", "/usr/share/nginx/www/symfony", "../mdb.sf21.lo", :nfs => true)
+
+    fpm_config.vm.provision :puppet do |puppet|
+      puppet.manifests_path = "manifests"
+      puppet.manifest_file  = "fpm.pp"
+    end
+  end
+
   config.vm.define :mongo do |mongo_config|
     mongo_config.vm.box = "precise64"
-    mongo_config.vm.network :hostonly, "192.168.33.20"
+    mongo_config.vm.network :hostonly, "192.168.34.20"
 
     mongo_config.vm.provision :puppet do |puppet|
       puppet.manifests_path = "manifests"
@@ -22,24 +34,15 @@ Vagrant::Config.run do |config|
     end
   end
 
-  config.vm.define :fpm do |fpm_config|
-    fpm_config.vm.box = "precise64"
-    fpm_config.vm.network :hostonly, "192.168.33.30"
-
-    fpm_config.vm.provision :puppet do |puppet|
-      puppet.manifests_path = "manifests"
-      puppet.manifest_file  = "fpm.pp"
-    end
-  end
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "precise64"
+  # config.vm.box = "precise64"
 
   # Enable the Puppet provisioner
-  config.vm.provision :puppet
+  # config.vm.provision :puppet
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
@@ -52,7 +55,7 @@ Vagrant::Config.run do |config|
   # via the IP. Host-only networks can talk to the host machine as well as
   # any other machines on the same network, but cannot be accessed (through this
   # network interface) by any external networks.
-  config.vm.network :hostonly, "192.168.33.10"
+  # config.vm.network :hostonly, "192.168.33.10"
 
   # Assign this VM to a bridged network, allowing you to connect directly to a
   # network using the host's network device. This makes the VM appear as another
@@ -61,7 +64,7 @@ Vagrant::Config.run do |config|
 
   # Forward a port from the guest to the host, which allows for outside
   # computers to access the VM, whereas host only networking does not.
-  config.vm.forward_port 80, 4567
+  # config.vm.forward_port 80, 4567
 
   # Share an additional folder to the guest VM. The first argument is
   # an identifier, the second is the path on the guest to mount the

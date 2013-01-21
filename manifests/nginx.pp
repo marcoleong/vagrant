@@ -8,8 +8,16 @@ class nginx {
     }
    
     package { "nginx":
-    ensure => present,
+        ensure => present,
     } 
+    exec { 'apt-get update':
+        command => '/usr/bin/apt-get update',
+        before => Package["nginx"]
+    }
+
+    package { "git":
+        ensure => present,
+    }
     
     file { '/etc/nginx/sites-available/default':
         owner  => root,
@@ -34,3 +42,4 @@ class nginx {
     
 }
     
+include nginx
