@@ -36,5 +36,5 @@ server {
 }
 
 upstream fpm_clust {
-  server 192.168.34.30:9000
+  server 192.168.34.30:9000;
 }

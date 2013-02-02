@@ -5,9 +5,10 @@ Vagrant::Config.run do |config|
   config.vm.define :nginx do |nginx_config|
     nginx_config.vm.box = "precise64"
     nginx_config.vm.network :hostonly, "192.168.34.10"
-    nginx_config.vm.share_folder("symfony", "/usr/share/nginx/www/symfony", "../mdb.sf21.lo", :nfs => true)
+    nginx_config.vm.share_folder("symfony", "/usr/share/nginx/www/symfony", "../ums2", :nfs => true)
 
     nginx_config.vm.provision :puppet do |puppet|
+      puppet.module_path = "modules"
       puppet.manifests_path = "manifests"
       puppet.manifest_file  = "nginx.pp"
     end
@@ -16,9 +17,10 @@ Vagrant::Config.run do |config|
   config.vm.define :fpm do |fpm_config|
     fpm_config.vm.box = "precise64"
     fpm_config.vm.network :hostonly, "192.168.34.30"
-    fpm_config.vm.share_folder("symfony", "/usr/share/nginx/www/symfony", "../mdb.sf21.lo", :nfs => true)
+    fpm_config.vm.share_folder("symfony", "/usr/share/nginx/www/symfony", "../ums2", :nfs => true)
 
     fpm_config.vm.provision :puppet do |puppet|
+      puppet.module_path = "modules"
       puppet.manifests_path = "manifests"
       puppet.manifest_file  = "fpm.pp"
     end
@@ -29,6 +31,7 @@ Vagrant::Config.run do |config|
     mongo_config.vm.network :hostonly, "192.168.34.20"
 
     mongo_config.vm.provision :puppet do |puppet|
+      puppet.module_path = "modules"
       puppet.manifests_path = "manifests"
       puppet.manifest_file  = "mongo.pp"
     end

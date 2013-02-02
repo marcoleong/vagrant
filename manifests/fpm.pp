@@ -1,5 +1,6 @@
 class fpm {
-    
+    include nodejs
+
     host {'self':
         ensure       => present,
         name         => $fqdn,
@@ -8,7 +9,7 @@ class fpm {
     }
     
     $php = ["php5-fpm", "php5-cli", "php5-dev", "php5-gd", "php5-curl", "php-pear", "php-apc", "php5-mcrypt", "php5-xdebug", "php5-sqlite", "php5-imagick"]
-    
+
     exec { 'apt-get update':
         command => '/usr/bin/apt-get update',
         before => [Package["python-software-properties"], Package["build-essential"], Package[$php]],
@@ -26,13 +27,22 @@ class fpm {
         command => '/usr/bin/add-apt-repository ppa:ondrej/php5',
         require => Package["python-software-properties"],
     }
-    
+
     exec { 'apt-get update for latest php':
         command => '/usr/bin/apt-get update',
         before => Package[$php],
-        require => Exec['add-apt-repository ppa:ondrej/php5'],
+        require => [Exec['add-apt-repository ppa:ondrej/php5'],Exec['add-apt-repository ppa:chris-lea/node.js']]
     }
-    
+
+    exec { 'gem update --system':
+        command => '/opt/vagrant_ruby/bin/gem update --system'
+    }
+
+    exec { 'gem install compass':
+        command => '/opt/vagrant_ruby/bin/gem install compass',
+        require => Exec['gem update --system']
+    }
+
     package { "build-essential":
         ensure => present,
     }
@@ -40,6 +50,11 @@ class fpm {
     package { $php:
         notify => Service['php5-fpm'],
         ensure => latest,
+    }
+
+    package { 'less':
+      ensure   => latest,
+      provider => 'npm',
     }
     
     exec { 'pecl install mongo':
@@ -110,5 +125,4 @@ class fpm {
     }
     
 }
-
 include fpm
