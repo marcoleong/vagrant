@@ -27,7 +27,7 @@ class mongo {
         group  => root,
         ensure => file,
         mode   => 644,
-        source => '../files/apt/10gen.list'
+        source => '/root/vagrant/files/apt/10gen.list'
     }
 }
     
