@@ -1,5 +1,12 @@
 class mongo {
 
+    host {'self':
+        ensure       => present,
+        name         => $fqdn,
+        host_aliases => ['puppet', $hostname],
+        ip           => $ipaddress,
+    }
+    
     package { "mongodb-10gen":
         ensure => present,
         require => Exec["apt-key mongokey"]
