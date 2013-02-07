@@ -3,9 +3,6 @@ class fpm {
 
     host {'self':
         ensure       => present,
-        name         => $fqdn,
-        host_aliases => ['puppet', $hostname],
-        ip           => $ipaddress,
     }
     
     $php = ["php5-fpm", "php5-cli", "php5-dev", "php5-gd", "php5-curl", "php-pear", "php-apc", "php5-mcrypt", "php5-xdebug", "php5-sqlite", "php5-imagick"]
