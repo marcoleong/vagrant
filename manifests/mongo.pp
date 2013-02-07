@@ -1,12 +1,5 @@
 class mongo {
 
-    host {'self':
-        ensure       => present,
-        name         => $fqdn,
-        host_aliases => ['puppet', $hostname],
-        ip           => $ipaddress,
-    }
-    
     package { "mongodb-10gen":
         ensure => present,
         require => Exec["apt-key mongokey"]
@@ -34,7 +27,7 @@ class mongo {
         group  => root,
         ensure => file,
         mode   => 644,
-        source => '/root/vagrant/files/apt/10gen.list'
+        source => '/vagrant/files/apt/10gen.list'
     }
 }
     
