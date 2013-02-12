@@ -16,19 +16,19 @@ class nginx {
         ensure => present,
     }
     
-    file { '/etc/nginx/sites-available/default':
+    file { '/etc/nginx/sites-available/cloudruge':
         owner  => root,
         group  => root,
         ensure => file,
         mode   => 644,
-        source => '/vagrant/files/nginx/default',
+        source => '/vagrant/files/nginx/cloudruge',
         require => Package["nginx"],
     }
     
-    file { "/etc/nginx/sites-enabled/default":
+    file { "/etc/nginx/sites-enabled/cloudruge":
         notify => Service["nginx"],
         ensure => link,
-        target => "/etc/nginx/sites-available/default",
+        target => "/etc/nginx/sites-available/cloudruge",
         require => Package["nginx"],
     }
     

@@ -1,7 +1,7 @@
 server {
   listen 80;
 
-  server_name localhost;
+  server_name alpha.cloudruge.com;
   root /usr/share/nginx/www/cloudruge/web;
 
   error_log /var/log/nginx/cloudruge.error.log;
