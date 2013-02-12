@@ -2,7 +2,7 @@ server {
   listen 80;
 
   server_name alpha.cloudruge.com;
-  root /usr/share/nginx/www/cloudruge/web;
+  root /usr/share/nginx/www/cloudruge/current/web;
 
   error_log /var/log/nginx/cloudruge.error.log;
   access_log /var/log/nginx/cloudruge.access.log;
