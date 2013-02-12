@@ -15,11 +15,16 @@ class fpm {
     include nodejs
     
     $php = ["php5-fpm", "php5-cli", "php5-dev", "php5-gd", "php5-curl", "php-pear", "php-apc", "php5-mcrypt", "php5-xdebug", "php5-sqlite", "php5-imagick"]
-    
+    $imagemagicklib = ["imagemagick","libmagickwand-dev","libmagickcore-dev"]
+
+    package { $imagemagicklib:
+        ensure => present,
+    }
+
     apt::ppa { "ppa:ondrej/php5":
         before => Package[$php],
     }
-    
+
     package { "git":
         ensure => present,
     }
