@@ -53,7 +53,7 @@ class fpm {
         command => '/usr/bin/pecl install --force mongo',
         logoutput => "on_failure",
         require => [Package["build-essential"], Package[$php]],
-        before => [File['/etc/php5/cli/php.ini'], File['/etc/php5/fpm/php.ini'], File['/etc/php5/fpm/php-fpm.conf'], File['/etc/php5/fpm/pool.d/www.conf']],
+        before => [File['/etc/php5/cli/php.ini'], File['/etc/php5/fpm/php.ini'], File['/etc/php5/fpm/php-fpm.conf'], File['/etc/php5/fpm/pool.d/cloudruge.conf']],
         unless => "/usr/bin/php -m | grep mongo",
     }
     
@@ -67,7 +67,7 @@ class fpm {
     exec { 'pear install pear.phpunit.de/PHPUnit':
         notify => Service["php5-fpm"],
         command => '/usr/bin/pear install --force pear.phpunit.de/PHPUnit',
-        before => [File['/etc/php5/cli/php.ini'], File['/etc/php5/fpm/php.ini'], File['/etc/php5/fpm/php-fpm.conf'], File['/etc/php5/fpm/pool.d/www.conf']],
+        before => [File['/etc/php5/cli/php.ini'], File['/etc/php5/fpm/php.ini'], File['/etc/php5/fpm/php-fpm.conf'], File['/etc/php5/fpm/pool.d/cloudruge.conf']],
         unless => "/bin/ls -l /usr/bin/ | grep phpunit",
     }
     
@@ -100,13 +100,13 @@ class fpm {
         require => Package[$php],
     }
     
-    file { '/etc/php5/fpm/pool.d/www.conf':
+    file { '/etc/php5/fpm/pool.d/cloudruge.conf':
         notify => Service["php5-fpm"],
         owner  => root,
         group  => root,
         ensure => file,
         mode   => 644,
-        source => '/vagrant/files/php/fpm/pool.d/www.conf',
+        source => '/vagrant/files/php/fpm/pool.d/cloudruge.conf',
         require => Package[$php],
     }
     
