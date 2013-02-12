@@ -1,34 +1,27 @@
+stage { 'first': before => Stage['main'] }
+
+class {
+    'update': stage => 'first'
+}
+
+class update {
+    exec { "apt-get update":
+        command => "/usr/bin/apt-get update",
+        onlyif => "/bin/sh -c '[ ! -f /var/cache/apt/pkgcache.bin ] || /usr/bin/find /etc/apt/* -cnewer /var/cache/apt/pkgcache.bin | /bin/grep . > /dev/null'"
+    }
+}
+
 class fpm {
     include nodejs
-
-    host {'self':
-        ensure       => present,
-    }
     
     $php = ["php5-fpm", "php5-cli", "php5-dev", "php5-gd", "php5-curl", "php-pear", "php-apc", "php5-mcrypt", "php5-xdebug", "php5-sqlite", "php5-imagick"]
-
-    exec { 'apt-get update':
-        command => '/usr/bin/apt-get update',
-        before => [Package["python-software-properties"], Package["build-essential"], Package[$php]],
-    }
     
-    package { "python-software-properties":
-        ensure => present,
+    apt::ppa { "ppa:ondrej/php5":
+        before => Package[$php],
     }
     
     package { "git":
         ensure => present,
-    }
-
-    exec { 'add-apt-repository ppa:ondrej/php5':
-        command => '/usr/bin/add-apt-repository ppa:ondrej/php5',
-        require => Package["python-software-properties"],
-    }
-
-    exec { 'apt-get update for latest php':
-        command => '/usr/bin/apt-get update',
-        before => Package[$php],
-        require => [Exec['add-apt-repository ppa:ondrej/php5'],Exec['add-apt-repository ppa:chris-lea/node.js']]
     }
 
     exec { 'gem update --system':
@@ -52,6 +45,7 @@ class fpm {
     package { 'less':
       ensure   => latest,
       provider => 'npm',
+      require => Package['npm']
     }
     
     exec { 'pecl install mongo':
@@ -122,4 +116,5 @@ class fpm {
     }
     
 }
+
 include fpm

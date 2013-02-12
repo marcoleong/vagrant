@@ -2,10 +2,10 @@ server {
   listen 80;
 
   server_name localhost;
-  root /usr/share/nginx/www/symfony/web;
+  root /usr/share/nginx/www/cloudruge/web;
 
-  error_log /var/log/nginx/symfony.error.log;
-  access_log /var/log/nginx/symfony.access.log;
+  error_log /var/log/nginx/cloudruge.error.log;
+  access_log /var/log/nginx/cloudruge.access.log;
 
   # strip app.php/ prefix if it is present
   rewrite ^/app\.php/?(.*)$ /$1 permanent;
@@ -36,5 +36,6 @@ server {
 }
 
 upstream fpm_clust {
-  server 192.168.34.30:9000;
+  server 172.22.3.2:9000;
+  server 172.22.3.3:9000;
 }
